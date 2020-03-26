@@ -26,6 +26,9 @@ import { ExtendedCluster } from '.././types';
 import KubeSummaryPanel from './KubeSummaryPanel';
 import NodePoolsDisplay from './NodePoolsDisplay';
 
+// @todo delete/move this before merge
+import ResizeNodePoolDrawer from './ResizeNodePoolDrawer';
+
 type ClassNames =
   | 'root'
   | 'title'
@@ -220,6 +223,14 @@ export const KubernetesClusterDetail: React.FunctionComponent<CombinedProps> = p
           />
         </Grid>
       </Grid>
+      {/** Delete before merge */}
+      <ResizeNodePoolDrawer
+        open={true}
+        onClose={() => null}
+        onSubmit={() => null}
+        isSubmitting={false}
+        nodePool={cluster.node_pools[0]}
+      />
     </React.Fragment>
   );
 };
