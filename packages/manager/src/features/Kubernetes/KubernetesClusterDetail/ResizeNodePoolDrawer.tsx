@@ -5,6 +5,7 @@ import Button from 'src/components/Button';
 import { makeStyles, Theme } from 'src/components/core/styles';
 import Typography from 'src/components/core/Typography';
 import Drawer from 'src/components/Drawer';
+import EnhancedNumberInput from 'src/components/EnhancedNumberInput';
 import Notice from 'src/components/Notice';
 import { displayClassAndSize } from 'src/features/linodes/presentation';
 import { useTypes } from 'src/hooks/useTypes';
@@ -13,13 +14,16 @@ import { nodeWarning } from '../kubeUtils';
 import { PoolNodeWithPrice } from '../types';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  item: {
-    paddingBottom: theme.spacing(3)
-  },
   summary: {
     fontWeight: 'bold',
     lineHeight: '20px',
     fontSize: '16px'
+  },
+  helperText: {
+    paddingBottom: theme.spacing() / 2
+  },
+  section: {
+    paddingBottom: theme.spacing(3)
   }
 }));
 
@@ -48,7 +52,6 @@ export const AddDeviceDrawer: React.FC<Props> = props => {
   const handleSubmit = () => {
     // @todo handling will have to be added here when we support Firewalls for NodeBalancers
     onSubmit();
-    setUpdatedCount(0);
   };
 
   // @todo title and error messaging will update to "Device" once NodeBalancers are allowed
@@ -71,26 +74,37 @@ export const AddDeviceDrawer: React.FC<Props> = props => {
       open={open}
       onClose={onClose}
     >
-      <Typography className={`${classes.summary} ${classes.item}`}>
-        Current pool: ${nodePool.totalMonthlyPrice}/month ({nodePool.count}{' '}
-        nodes at ${pricePerNode}/month)
-      </Typography>
       <form
         onSubmit={(e: React.ChangeEvent<HTMLFormElement>) => {
           e.preventDefault();
           handleSubmit();
         }}
       >
+        <div className={classes.section}>
+          <Typography className={classes.summary}>
+            Current pool: ${nodePool.totalMonthlyPrice}/month ({nodePool.count}{' '}
+            nodes at ${pricePerNode}/month)
+          </Typography>
+        </div>
+
         {errorMessage && <Notice error text={errorMessage} />}
 
-        <Typography className={classes.item}>
-          Enter the number of nodes you'd like in this pool:
-        </Typography>
+        <div className={classes.section}>
+          <Typography className={classes.helperText}>
+            Enter the number of nodes you'd like in this pool:
+          </Typography>
+          <EnhancedNumberInput
+            value={updatedCount}
+            setValue={setUpdatedCount}
+          />
+        </div>
 
-        <Typography className={`${classes.summary} ${classes.item}`}>
-          Resized pool: ${updatedCount * pricePerNode}/month ({updatedCount}{' '}
-          nodes at ${pricePerNode}/month)
-        </Typography>
+        <div className={classes.section}>
+          <Typography className={classes.summary}>
+            Resized pool: ${updatedCount * pricePerNode}/month ({updatedCount}{' '}
+            nodes at ${pricePerNode}/month)
+          </Typography>
+        </div>
 
         {updatedCount < nodePool.count && (
           <Notice important warning text={resizeWarning} />
@@ -108,9 +122,11 @@ export const AddDeviceDrawer: React.FC<Props> = props => {
           >
             Save Changes
           </Button>
-          {/* <Button onClick={onClose} buttonType="cancel" data-qa-cancel>
-            Cancel
-          </Button> */}
+          {/* 
+            <Button onClick={onClose} buttonType="cancel" data-qa-cancel>
+                Cancel
+            </Button> 
+          */}
         </ActionsPanel>
       </form>
     </Drawer>
