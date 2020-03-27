@@ -10,8 +10,8 @@ import Notice from 'src/components/Notice';
 import { displayClassAndSize } from 'src/features/linodes/presentation';
 import { useTypes } from 'src/hooks/useTypes';
 import { getAPIErrorOrDefault } from 'src/utilities/errorUtils';
-import { nodeWarning } from '../kubeUtils';
-import { PoolNodeWithPrice } from '../types';
+import { nodeWarning } from '../../kubeUtils';
+import { PoolNodeWithPrice } from '../../types';
 
 const useStyles = makeStyles((theme: Theme) => ({
   summary: {
@@ -27,12 +27,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-interface Props {
+export interface Props {
   open: boolean;
   error?: APIError[];
   isSubmitting: boolean;
   onClose: () => void;
-  onSubmit: () => void;
+  onSubmit: (updatedValue: number) => void;
   nodePool: PoolNodeWithPrice;
 }
 
@@ -49,9 +49,13 @@ export const AddDeviceDrawer: React.FC<Props> = props => {
     nodePool.count
   );
 
+  const handleChange = (value: number) => {
+    setUpdatedCount(Math.min(100, Math.floor(value)));
+  };
+
   const handleSubmit = () => {
     // @todo handling will have to be added here when we support Firewalls for NodeBalancers
-    onSubmit();
+    onSubmit(updatedCount);
   };
 
   // @todo title and error messaging will update to "Device" once NodeBalancers are allowed
@@ -93,10 +97,7 @@ export const AddDeviceDrawer: React.FC<Props> = props => {
           <Typography className={classes.helperText}>
             Enter the number of nodes you'd like in this pool:
           </Typography>
-          <EnhancedNumberInput
-            value={updatedCount}
-            setValue={setUpdatedCount}
-          />
+          <EnhancedNumberInput value={updatedCount} setValue={handleChange} />
         </div>
 
         <div className={classes.section}>
