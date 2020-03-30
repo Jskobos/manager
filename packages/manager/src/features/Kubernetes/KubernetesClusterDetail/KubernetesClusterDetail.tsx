@@ -108,6 +108,9 @@ export const KubernetesClusterDetail: React.FunctionComponent<CombinedProps> = p
 
   const [updateError, setUpdateError] = React.useState<string | undefined>();
 
+  // @todo delete before merge
+  const [open, setOpen] = React.useState<boolean>(true);
+
   React.useEffect(() => {
     const clusterID = +props.match.params.clusterID;
     if (clusterID) {
@@ -225,11 +228,12 @@ export const KubernetesClusterDetail: React.FunctionComponent<CombinedProps> = p
       </Grid>
       {/** Delete before merge */}
       <ResizeNodePoolDrawer
-        open={true}
-        onClose={() => null}
+        open={open}
+        onClose={() => setOpen(false)}
         onSubmit={() => null}
         isSubmitting={false}
         nodePool={cluster.node_pools[0]}
+        error="An error"
       />
     </React.Fragment>
   );

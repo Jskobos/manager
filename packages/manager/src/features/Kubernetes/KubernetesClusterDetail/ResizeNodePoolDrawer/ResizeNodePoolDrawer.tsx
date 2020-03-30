@@ -1,4 +1,3 @@
-import { APIError } from 'linode-js-sdk/lib/types';
 import * as React from 'react';
 import ActionsPanel from 'src/components/ActionsPanel';
 import Button from 'src/components/Button';
@@ -9,7 +8,6 @@ import EnhancedNumberInput from 'src/components/EnhancedNumberInput';
 import Notice from 'src/components/Notice';
 import { displayClassAndSize } from 'src/features/linodes/presentation';
 import { useTypes } from 'src/hooks/useTypes';
-import { getAPIErrorOrDefault } from 'src/utilities/errorUtils';
 import { nodeWarning } from '../../kubeUtils';
 import { PoolNodeWithPrice } from '../../types';
 
@@ -29,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export interface Props {
   open: boolean;
-  error?: APIError[];
+  error?: string;
   isSubmitting: boolean;
   onClose: () => void;
   onSubmit: (updatedValue: number) => void;
@@ -54,14 +52,9 @@ export const AddDeviceDrawer: React.FC<Props> = props => {
   };
 
   const handleSubmit = () => {
-    // @todo handling will have to be added here when we support Firewalls for NodeBalancers
+    alert(`Called onSubmit with ${updatedCount}`);
     onSubmit(updatedCount);
   };
-
-  // @todo title and error messaging will update to "Device" once NodeBalancers are allowed
-  const errorMessage = error
-    ? getAPIErrorOrDefault(error, 'Error adding Linode')[0].reason
-    : undefined;
 
   const planType = types.entities.find(
     thisType => thisType.id === nodePool.type
@@ -91,7 +84,7 @@ export const AddDeviceDrawer: React.FC<Props> = props => {
           </Typography>
         </div>
 
-        {errorMessage && <Notice error text={errorMessage} />}
+        {error && <Notice error text={error} />}
 
         <div className={classes.section}>
           <Typography className={classes.helperText}>
