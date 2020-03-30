@@ -8,6 +8,7 @@ import ResizeNodePoolDrawer, { Props } from './ResizeNodePoolDrawer';
 afterEach(cleanup);
 
 const pool = nodePoolFactory.build();
+const smallPool = nodePoolFactory.build({ count: 2 });
 
 const props: Props = {
   open: true,
@@ -36,5 +37,21 @@ describe('ResizeNodePoolDrawer', () => {
     const button = getByText(/save/i);
     fireEvent.click(button);
     expect(props.onSubmit).toHaveBeenCalledWith(pool.count + 1);
+  });
+
+  it('should display a warning if the user tries to resize a node pool to < 3 nodes', () => {
+    const { getByText } = renderWithTheme(
+      <ResizeNodePoolDrawer {...props} nodePool={smallPool} />
+    );
+    expect(getByText(/at least 3 nodes/i));
+  });
+
+  it('should display a warning if the user tries to resize to a smaller node count', () => {
+    const { getByTestId, getByText } = renderWithTheme(
+      <ResizeNodePoolDrawer {...props} />
+    );
+    const decrement = getByTestId('decrement-button');
+    fireEvent.click(decrement);
+    expect(getByText(/fewer nodes/i));
   });
 });
