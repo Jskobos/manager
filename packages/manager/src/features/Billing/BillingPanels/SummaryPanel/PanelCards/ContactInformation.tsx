@@ -11,7 +11,6 @@ import Typography from 'src/components/core/Typography';
 import BillingContactDrawer from './EditBillingContactDrawer';
 
 import styled from 'src/containers/SummaryPanels.styles';
-import * as classNames from 'classnames';
 
 const useStyles = makeStyles((theme: Theme) => ({
   ...styled(theme),
@@ -102,7 +101,7 @@ const ContactInformation: React.FC<CombinedProps> = props => {
   return (
     <Grid item xs={6}>
       <Paper className={classes.summarySection} data-qa-contact-summary>
-        <Grid container spacing={2} className={classes.grid}>
+        <Grid container direction="row" spacing={2} className={classes.grid}>
           <Grid item className={classes.switchWrapper}>
             <Typography variant="h3" className={classes.title}>
               Billing Contact
@@ -116,62 +115,49 @@ const ContactInformation: React.FC<CombinedProps> = props => {
           </Grid>
         </Grid>
 
-        <Grid container spacing={2} className={classes.grid}>
-          {(firstName ||
-            lastName ||
-            company ||
-            address1 ||
-            address2 ||
-            city ||
-            state ||
-            zip) && (
-            <Grid item className={classes.switchWrapper}>
-              {(firstName || lastName) && (
-                <div className={classes.section} data-qa-contact-name>
-                  <div
-                    className={classes.wordWrap}
-                  >{`${firstName} ${lastName}`}</div>
-                </div>
-              )}
+        <Grid
+          container
+          spacing={2}
+          className={classes.grid}
+          justify="space-between"
+        >
+          <Grid item>
+            {(firstName || lastName) && (
+              <div className={classes.section} data-qa-contact-name>
+                <div
+                  className={classes.wordWrap}
+                >{`${firstName} ${lastName}`}</div>
+              </div>
+            )}
 
-              {company && (
-                <div className={classes.section} data-qa-company>
-                  <div className={classes.wordWrap}>{company}</div>
-                </div>
-              )}
+            {company && (
+              <div className={classes.section} data-qa-company>
+                <div className={classes.wordWrap}>{company}</div>
+              </div>
+            )}
 
-              {(address1 || address2 || city || state || zip) && (
+            <div>
+              <div className={classes.section} data-qa-contact-address>
                 <div>
-                  <div className={classes.section} data-qa-contact-address>
-                    <div>
-                      <span>{address1}</span>
-                    </div>
-                  </div>
-
-                  <div className={classes.section}>
-                    <div>
-                      <div>{address2}</div>
-                    </div>
-                  </div>
+                  <span>{address1}</span>
                 </div>
-              )}
+              </div>
 
               <div className={classes.section}>
                 <div>
-                  <div>{`${city}${city && state && ','} ${state} ${zip}`}</div>
+                  <div>{address2}</div>
                 </div>
               </div>
-            </Grid>
-          )}
+            </div>
 
-          <Grid
-            item
-            className={classNames({
-              [classes.switchWrapper]: true,
-              [classes.switchWrapperFlex]:
-                taxId !== undefined && taxId !== null && taxId !== ''
-            })}
-          >
+            <div className={classes.section}>
+              <div>
+                <div>{`${city}${city && state && ','} ${state} ${zip}`}</div>
+              </div>
+            </div>
+          </Grid>
+
+          <Grid item>
             <div className={classes.section} data-qa-contact-email>
               <div className={classes.wordWrap}>{email}</div>
             </div>
