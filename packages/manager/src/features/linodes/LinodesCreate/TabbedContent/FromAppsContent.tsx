@@ -120,7 +120,7 @@ export const FromAppsContent: React.FC<CombinedProps> = props => {
   const handleChangeUDF = (key: string, value: string) => {
     // Either overwrite or create new selection
     const newUDFData = assocPath([key], value, props.selectedUDFs);
-    props.handleSelectUDFs({ ...props.selectedUDFs, ...newUDFData });
+    props.handleSelectUDFs(newUDFData);
   };
 
   const openDrawer = (stackScriptLabel: string) => {

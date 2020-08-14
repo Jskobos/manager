@@ -334,7 +334,10 @@ class LinodeCreateContainer extends React.PureComponent<CombinedProps, State> {
 
   setTags = (tags: Tag[]) => this.setState({ tags });
 
-  setUDFs = (udfs: any[]) => this.setState({ udfs });
+  setUDFs = (newUDFs: any[]) => {
+    const { udfs } = this.state;
+    this.setState({ udfs: { ...udfs, ...newUDFs } });
+  };
 
   generateLabel = () => {
     const { createType, getLabel, imagesData, regionsData } = this.props;
