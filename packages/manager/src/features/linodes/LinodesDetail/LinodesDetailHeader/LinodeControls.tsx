@@ -115,7 +115,6 @@ const LinodeControls: React.FC<CombinedProps> = props => {
       <Grid item>
         <Breadcrumb
           pathname={props.location.pathname}
-          removeCrumbX={2}
           labelOptions={{ linkTo: getLabelLink() }}
           className={classes.breadCrumbs}
           onEditHandlers={
