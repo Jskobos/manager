@@ -7,6 +7,7 @@ import Typography from 'src/components/core/Typography';
 import HelpIcon from 'src/components/HelpIcon';
 import TextField from 'src/components/TextField';
 import Grid from 'src/components/Grid';
+import ConfirmTransferDialog from './ConfirmTransferDialog';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -37,61 +38,68 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-interface Props {
-  token: string;
-  onTokenInput: (token: string) => void;
-  openConfirmTransferDialog: () => void;
-}
+export const TransferControls: React.FC<{}> = _ => {
+  const [token, setToken] = React.useState('');
+  const [confirmDialogOpen, setConfirmDialogOpen] = React.useState(false);
 
-export type CombinedProps = Props;
-
-export const TransferControls: React.FC<Props> = props => {
-  const { openConfirmTransferDialog, onTokenInput, token } = props;
   const classes = useStyles();
   const { push } = useHistory();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onTokenInput(e.target.value);
+    setToken(e.target.value);
+  };
+
+  const handleCloseDialog = () => {
+    setConfirmDialogOpen(false);
+    // I don't love the UX here but it seems better than leaving a token in the input
+    setTimeout(() => setToken(''), 150);
   };
 
   const handleCreateTransfer = () => push('/account/entity-transfers/create');
   return (
-    <Grid container className={classes.root}>
-      <Grid item>
-        <Typography className={classes.label}>
-          <strong>Receive a Transfer</strong>
-        </Typography>
-      </Grid>
-      <Grid item className={classes.receiveTransfer}>
-        <Grid container>
-          <TextField
-            className={classes.transferInput}
-            hideLabel
-            value={token}
-            label="Receive a Transfer"
-            placeholder="Enter a token"
-            onChange={handleInputChange}
-          />
-          <Button
-            className={classes.reviewDetails}
-            buttonType="primary"
-            disabled={token === ''}
-            onClick={openConfirmTransferDialog}
-          >
-            Review Details
-          </Button>
-          <Hidden mdDown>
-            <HelpIcon
-              className={classes.helpIcon}
-              text="Enter a transfer token to review the details and accept the transfer."
-            />
-          </Hidden>
+    <>
+      <Grid container className={classes.root}>
+        <Grid item>
+          <Typography className={classes.label}>
+            <strong>Receive a Transfer</strong>
+          </Typography>
         </Grid>
+        <Grid item className={classes.receiveTransfer}>
+          <Grid container>
+            <TextField
+              className={classes.transferInput}
+              hideLabel
+              value={token}
+              label="Receive a Transfer"
+              placeholder="Enter a token"
+              onChange={handleInputChange}
+            />
+            <Button
+              className={classes.reviewDetails}
+              buttonType="primary"
+              disabled={token === ''}
+              onClick={() => setConfirmDialogOpen(true)}
+            >
+              Review Details
+            </Button>
+            <Hidden mdDown>
+              <HelpIcon
+                className={classes.helpIcon}
+                text="Enter a transfer token to review the details and accept the transfer."
+              />
+            </Hidden>
+          </Grid>
+        </Grid>
+        <Button buttonType="primary" onClick={handleCreateTransfer}>
+          Make a Transfer
+        </Button>
       </Grid>
-      <Button buttonType="primary" onClick={handleCreateTransfer}>
-        Make a Transfer
-      </Button>
-    </Grid>
+      <ConfirmTransferDialog
+        open={confirmDialogOpen}
+        onClose={handleCloseDialog}
+        token={token}
+      />
+    </>
   );
 };
 
