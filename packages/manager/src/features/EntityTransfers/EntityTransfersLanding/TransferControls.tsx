@@ -10,6 +10,7 @@ import TextField from 'src/components/TextField';
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(2),
     display: 'flex',
     flexFlow: 'row wrap',
     alignItems: 'center',
@@ -61,11 +62,9 @@ export const TransferControls: React.FC<Props> = props => {
   return (
     <div className={classes.root}>
       <div className={classes.receiveTransfer}>
-        <Hidden mdDown>
-          <Typography className={classes.label}>
-            <strong>Receive a Transfer</strong>
-          </Typography>
-        </Hidden>
+        <Typography className={classes.label}>
+          <strong>Receive a Transfer</strong>
+        </Typography>
         <TextField
           className={classes.transferInput}
           hideLabel
@@ -82,7 +81,12 @@ export const TransferControls: React.FC<Props> = props => {
         >
           Review Details
         </Button>
-        <HelpIcon className={classes.helpIcon} text="Text TBD" />
+        <Hidden mdDown>
+          <HelpIcon
+            className={classes.helpIcon}
+            text="Enter a transfer token to review the details and accept the transfer."
+          />
+        </Hidden>
       </div>
       <Button buttonType="primary" onClick={handleCreateTransfer}>
         Make a Transfer
