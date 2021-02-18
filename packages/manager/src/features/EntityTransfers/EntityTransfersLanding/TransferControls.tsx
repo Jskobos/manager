@@ -6,6 +6,7 @@ import { makeStyles, Theme } from 'src/components/core/styles';
 import Typography from 'src/components/core/Typography';
 import HelpIcon from 'src/components/HelpIcon';
 import TextField from 'src/components/TextField';
+import Grid from 'src/components/Grid';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -17,12 +18,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'space-between',
     width: '100%'
   },
-  receiveTransfer: {
-    display: 'flex',
-    flexFlow: 'row wrap',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
+  receiveTransfer: {},
   reviewDetails: {
     marginLeft: theme.spacing(2)
   },
@@ -60,38 +56,42 @@ export const TransferControls: React.FC<Props> = props => {
 
   const handleCreateTransfer = () => push('/account/entity-transfers/create');
   return (
-    <div className={classes.root}>
-      <div className={classes.receiveTransfer}>
+    <Grid container className={classes.root}>
+      <Grid item>
         <Typography className={classes.label}>
           <strong>Receive a Transfer</strong>
         </Typography>
-        <TextField
-          className={classes.transferInput}
-          hideLabel
-          value={token}
-          label="Receive a Transfer"
-          placeholder="Enter a token"
-          onChange={handleInputChange}
-        />
-        <Button
-          className={classes.reviewDetails}
-          buttonType="primary"
-          disabled={token === ''}
-          onClick={openConfirmTransferDialog}
-        >
-          Review Details
-        </Button>
-        <Hidden mdDown>
-          <HelpIcon
-            className={classes.helpIcon}
-            text="Enter a transfer token to review the details and accept the transfer."
+      </Grid>
+      <Grid item className={classes.receiveTransfer}>
+        <Grid container>
+          <TextField
+            className={classes.transferInput}
+            hideLabel
+            value={token}
+            label="Receive a Transfer"
+            placeholder="Enter a token"
+            onChange={handleInputChange}
           />
-        </Hidden>
-      </div>
+          <Button
+            className={classes.reviewDetails}
+            buttonType="primary"
+            disabled={token === ''}
+            onClick={openConfirmTransferDialog}
+          >
+            Review Details
+          </Button>
+          <Hidden mdDown>
+            <HelpIcon
+              className={classes.helpIcon}
+              text="Enter a transfer token to review the details and accept the transfer."
+            />
+          </Hidden>
+        </Grid>
+      </Grid>
       <Button buttonType="primary" onClick={handleCreateTransfer}>
         Make a Transfer
       </Button>
-    </div>
+    </Grid>
   );
 };
 
