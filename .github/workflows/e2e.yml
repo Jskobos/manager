@@ -10,7 +10,7 @@ on:
     - cron: '0 13 * * 1-5'
   push:
     branches:
-      - develop
+      - e2e-workflow-update
 
 jobs:
   run-cypress-e2e:
